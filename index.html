@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@1NONLY TRAA | Bio Links</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            /* Ganti dengan link URL gambar atau nama file seperti 'bg.jpg' */
+            --bg-image: url('bg.jpg');
+            --accent-cyan: #00e5ff;
+            --accent-lime: #aeea00;
+            --glass-bg: rgba(7, 22, 36, 0.68);
+            --glass-border: rgba(0, 229, 255, 0.35);
+            --text-main: #ffffff;
+            --text-muted: #b0d4e3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text-main);
+            background-color: #04101c;
+            position: relative;
+            overflow-x: hidden;
+            padding: 36px 16px 60px;
+        }
+
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            transform: scale(1.03);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(4, 18, 32, 0.55) 0%,
+                rgba(3, 13, 24, 0.85) 100%
+            );
+            backdrop-filter: blur(2.5px);
+            -webkit-backdrop-filter: blur(2.5px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        /* Profil */
+        .avatar-wrapper {
+            position: relative;
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            padding: 3.5px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
+            box-shadow: 0 0 24px rgba(0, 229, 255, 0.45);
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 3px solid #041524;
+        }
+
+        .username {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .username:active {
+            opacity: 0.75;
+        }
+
+        .verified-badge {
+            color: var(--accent-cyan);
+            font-size: 1.05rem;
+        }
+
+        body.owner-unlocked .verified-badge {
+            color: var(--accent-lime);
+        }
+
+        .bio {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            max-width: 340px;
+        }
+
+        /* Tombol Kelola & Tambah Folder (Hanya terlihat saat mode pemilik aktif) */
+        .toolbar {
+            width: 100%;
+            display: none;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        body.owner-unlocked .toolbar {
+            display: flex;
+        }
+
+        .tool-btn {
+            flex: 1;
+            padding: 11px 14px;
+            border-radius: 14px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.25s ease;
+        }
+
+        .tool-btn.primary {
+            border-color: rgba(174, 234, 0, 0.55);
+            background: linear-gradient(90deg, rgba(0, 229, 255, 0.16), rgba(174, 234, 0, 0.15));
+            color: var(--accent-lime);
+        }
+
+        .tool-btn:hover, .tool-btn.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 229, 255, 0.22);
+            color: #fff;
+        }
+
+        /* Daftar Link Utama & Folder */
+        .links-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .link-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 15px 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-lime);
+            background: rgba(10, 34, 56, 0.85);
+            box-shadow: 0 8px 24px rgba(0, 229, 255, 0.2);
+        }
+
+        .link-card.featured {
+            border: 1px solid rgba(174, 234, 0, 0.55);
+            background: linear-gradient(90deg, rgba(0, 229, 255, 0.16), rgba(174, 234, 0, 0.15));
+        }
+
+        .link-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 11px;
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            color: var(--accent-cyan);
+            overflow: hidden;
+        }
+
+        .link-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .link-text {
+            text-align: left;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-left: 10px;
+            transition: transform 0.25s ease;
+        }
+
+        /* Folder Accordion */
+        .folder-box {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 18px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .folder-header:hover {
+            background: rgba(0, 229, 255, 0.08);
+        }
+
+        .folder-chevron {
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            transition: transform 0.25s ease;
+        }
+
+        .folder-box.open .folder-chevron {
+            transform: rotate(180deg);
+            color: var(--accent-lime);
+        }
+
+        .folder-content {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0 14px 14px;
+            border-top: 1px solid rgba(0, 229, 255, 0.16);
+            padding-top: 12px;
+        }
+
+        .folder-box.open .folder-content {
+            display: flex;
+        }
+
+        .sub-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 14px;
+            border-radius: 12px;
+            background: rgba(4, 16, 28, 0.75);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .sub-link-item:hover {
+            border-color: var(--accent-lime);
+            transform: translateX(3px);
+        }
+
+        .folder-actions {
+            display: none;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        body.owner-unlocked .folder-actions {
+            display: flex;
+        }
+
+        .mini-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px dashed rgba(0, 229, 255, 0.4);
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--accent-cyan);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mini-btn.danger {
+            border-style: solid;
+            border-color: rgba(255, 82, 82, 0.45);
+            background: rgba(255, 82, 82, 0.12);
+            color: #ff8a80;
+            flex: 0 0 auto;
+        }
+
+        .edit-controls {
+            display: none;
+            gap: 6px;
+            margin-left: 8px;
+        }
+
+        body.owner-unlocked.edit-mode .edit-controls {
+            display: flex;
+        }
+
+        .icon-action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 82, 82, 0.45);
+            background: rgba(255, 82, 82, 0.15);
+            color: #ff8a80;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+
+        /* Sosial Media Bawah */
+        .socials {
+            display: flex;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-4px);
+            color: #04101c;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.6);
+        }
+
+        footer {
+            margin-top: 28px;
+            font-size: 0.75rem;
+            color: rgba(176, 212, 227, 0.65);
+        }
+
+        /* Modal Kustom */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 10, 18, 0.82);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 390px;
+            background: #071929;
+            border: 1px solid var(--accent-cyan);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--accent-cyan);
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .icon-picker-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-preview-box {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 11px;
+            background: rgba(0, 229, 255, 0.14);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-lime);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+
+        .icon-preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .gallery-btn {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(174, 234, 0, 0.45);
+            background: rgba(174, 234, 0, 0.12);
+            color: var(--accent-lime);
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .clear-photo-btn {
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 82, 82, 0.4);
+            background: rgba(255, 82, 82, 0.12);
+            color: #ff8a80;
+            font-size: 0.74rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        .clear-photo-btn.show {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            background: #04101c;
+            color: #fff;
+            font-size: 0.86rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-lime);
+        }
+
+        .error-text {
+            color: #ff8a80;
+            font-size: 0.76rem;
+            text-align: left;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn-cancel, .btn-save {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
+            color: #04101c;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <main class="container">
+        <div class="avatar-wrapper">
+            <div class="avatar"></div>
+        </div>
+
+        <!-- Klik teks ini untuk membuka / mengunci Mode Pemilik -->
+        <h1 class="username" onclick="handleOwnerAccess()">
+            @1NONLY TRAA
+            <i class="fa-solid fa-circle-check verified-badge"></i>
+        </h1>
+        <p class="bio">Digital Creator • Storefront • Web & Game Projects</p>
+
+        <!-- Tombol Tambah Folder & Mode Hapus (Khusus Pemilik) -->
+        <div class="toolbar">
+            <button type="button" class="tool-btn primary" onclick="openFolderModal()">
+                <i class="fa-solid fa-folder-plus"></i> Tambah Folder
+            </button>
+            <button type="button" class="tool-btn" id="editBtn" onclick="toggleEditMode()">
+                <i class="fa-solid fa-pen-to-square"></i> Atur
+            </button>
+        </div>
+
+        <!-- Daftar Link & Folder -->
+        <div class="links-list" id="linksList"></div>
+
+        <!-- Ikon Sosial Media -->
+        <div class="socials">
+            <a href="#" target="_blank" class="social-icon" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="#" target="_blank" class="social-icon" aria-label="Telegram">
+                <i class="fa-brands fa-telegram"></i>
+            </a>
+        </div>
+
+        <footer>
+            © 2026 @1NONLY TRAA. All rights reserved.
+        </footer>
+    </main>
+
+    <!-- Modal Password Pemilik -->
+    <div class="modal-backdrop" id="pinModal">
+        <div class="modal-card">
+            <div class="modal-title"><i class="fa-solid fa-shield-halved"></i> Mode Pemilik</div>
+            <div class="form-group">
+                <label>Masukkan Password</label>
+                <input type="password" class="form-control" id="pinInput" placeholder="Masukkan password..." onkeydown="if(event.key==='Enter') verifyPin()">
+                <div class="error-text" id="pinError">Password salah, silakan coba lagi.</div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('pinModal')">Batal</button>
+                <button type="button" class="btn-save" onclick="verifyPin()">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Folder -->
+    <div class="modal-backdrop" id="folderModal">
+        <div class="modal-card">
+            <div class="modal-title"><i class="fa-solid fa-folder-plus"></i> Buat Folder Baru</div>
+            <div class="form-group">
+                <label>Kategori Cepat (Opsional)</label>
+                <select class="form-control" id="folderPreset" onchange="applyPreset()">
+                    <option value="">-- Pilih Preset Kategori --</option>
+                    <option value="Saluran WhatsApp|Kumpulan link saluran & info update|fa-brands fa-whatsapp">Saluran WhatsApp</option>
+                    <option value="TikTok|Akun utama, cadangan & konten|fa-brands fa-tiktok">TikTok</option>
+                    <option value="Nomor WhatsApp|Admin order, CS & kontak resmi|fa-solid fa-phone">Nomor WhatsApp</option>
+                    <option value="Lainnya|Tautan & koleksi tambahan|fa-solid fa-layer-group">Lainnya</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ikon / Foto Galeri Folder</label>
+                <div class="icon-picker-row">
+                    <div class="icon-preview-box" id="folderIconPreviewBox">
+                        <i id="folderIconPreview" class="fa-solid fa-folder"></i>
+                    </div>
+                    <select class="form-control" id="folderIcon" onchange="onFolderIconSelectChange()">
+                        <option value="fa-solid fa-folder">Folder Standar</option>
+                        <option value="fa-brands fa-whatsapp">WhatsApp / Saluran WA</option>
+                        <option value="fa-brands fa-tiktok">TikTok</option>
+                        <option value="fa-solid fa-phone">Nomor Telepon / WA</option>
+                        <option value="fa-brands fa-instagram">Instagram</option>
+                        <option value="fa-brands fa-telegram">Telegram</option>
+                        <option value="fa-solid fa-store">Toko / Katalog</option>
+                        <option value="fa-solid fa-gamepad">Game / Hiburan</option>
+                        <option value="fa-solid fa-layer-group">Lainnya / Koleksi</option>
+                    </select>
+                </div>
+                <div class="gallery-upload-row">
+                    <input type="file" id="folderGalleryInput" accept="image/*" style="display:none;" onchange="handleGalleryImage(event, 'folder')">
+                    <button type="button" class="gallery-btn" onclick="document.getElementById('folderGalleryInput').click()">
+                        <i class="fa-solid fa-image"></i> Pilih Foto dari Galeri
+                    </button>
+                    <button type="button" class="clear-photo-btn" id="folderClearPhotoBtn" onclick="clearGalleryImage('folder')">
+                        <i class="fa-solid fa-xmark"></i> Hapus Foto
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nama Folder</label>
+                <input type="text" class="form-control" id="folderName" placeholder="Contoh: Saluran WhatsApp">
+            </div>
+            <div class="form-group">
+                <label>Deskripsi Singkat</label>
+                <input type="text" class="form-control" id="folderDesc" placeholder="Contoh: Klik untuk melihat daftar link">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('folderModal')">Batal</button>
+                <button type="button" class="btn-save" onclick="saveFolder()">Simpan Folder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Link ke Dalam Folder -->
+    <div class="modal-backdrop" id="linkModal">
+        <div class="modal-card">
+            <div class="modal-title"><i class="fa-solid fa-link"></i> Tambah Link ke Folder</div>
+            <div class="form-group">
+                <label>Jenis / Ikon Link atau Foto Galeri</label>
+                <div class="icon-picker-row">
+                    <div class="icon-preview-box" id="linkIconPreviewBox">
+                        <i id="linkIconPreview" class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <select class="form-control" id="linkType" onchange="onLinkIconSelectChange()">
+                        <option value="fa-brands fa-whatsapp">WhatsApp / Saluran WA</option>
+                        <option value="fa-brands fa-tiktok">TikTok</option>
+                        <option value="fa-solid fa-phone">Nomor Telepon / WA</option>
+                        <option value="fa-brands fa-instagram">Instagram</option>
+                        <option value="fa-brands fa-telegram">Telegram</option>
+                        <option value="fa-solid fa-globe">Website / Link Lainnya</option>
+                    </select>
+                </div>
+                <div class="gallery-upload-row">
+                    <input type="file" id="linkGalleryInput" accept="image/*" style="display:none;" onchange="handleGalleryImage(event, 'link')">
+                    <button type="button" class="gallery-btn" onclick="document.getElementById('linkGalleryInput').click()">
+                        <i class="fa-solid fa-image"></i> Pilih Foto dari Galeri
+                    </button>
+                    <button type="button" class="clear-photo-btn" id="linkClearPhotoBtn" onclick="clearGalleryImage('link')">
+                        <i class="fa-solid fa-xmark"></i> Hapus Foto
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Judul Link</label>
+                <input type="text" class="form-control" id="linkTitle" placeholder="Contoh: Saluran WA Utama / +62 812xxxx">
+            </div>
+            <div class="form-group">
+                <label>URL Link (atau nomor WA tanpa +)</label>
+                <input type="text" class="form-control" id="linkUrl" placeholder="https://whatsapp.com/channel/... atau 62812...">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('linkModal')">Batal</button>
+                <button type="button" class="btn-save" onclick="saveLinkToFolder()">Tambahkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'traa_biolink_data_v2';
+        const OWNER_PASSWORD = 'TRAA';
+
+        let activeFolderId = null;
+        let isOwnerUnlocked = false;
+        let isEditMode = false;
+        let tempFolderPhoto = '';
+        let tempLinkPhoto = '';
+
+        const defaultData = {
+            directLinks: [
+                {
+                    id: 'wa-admin',
+                    title: 'Order & Admin WhatsApp',
+                    sub: 'Fast respon & transaksi aman',
+                    url: 'https://wa.me/6281234567890',
+                    icon: 'fa-brands fa-whatsapp',
+                    photo: '',
+                    featured: true
+                },
+                {
+                    id: 'tiktok-main',
+                    title: 'TikTok Official',
+                    sub: 'Konten & update terbaru',
+                    url: 'https://tiktok.com/@1nonlytraa',
+                    icon: 'fa-brands fa-tiktok',
+                    photo: '',
+                    featured: false
+                }
+            ],
+            folders: [
+                {
+                    id: 'folder-wa-channel',
+                    name: 'Saluran WhatsApp',
+                    sub: 'Daftar saluran & info update',
+                    icon: 'fa-brands fa-whatsapp',
+                    photo: '',
+                    open: false,
+                    items: []
+                },
+                {
+                    id: 'folder-wa-numbers',
+                    name: 'Nomor WhatsApp',
+                    sub: 'Kontak admin & nomor cadangan',
+                    icon: 'fa-solid fa-phone',
+                    photo: '',
+                    open: false,
+                    items: []
+                }
+            ]
+        };
+
+        let appData = loadData();
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : structuredClone(defaultData);
+            } catch (e) {
+                return structuredClone(defaultData);
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                alert('Penyimpanan browser penuh. Coba gunakan foto berukuran lebih kecil.');
+            }
+        }
+
+        function renderIconHtml(iconClass, photoDataUrl, small = false) {
+            if (photoDataUrl) {
+                return `<img src="${photoDataUrl}" alt="icon">`;
+            }
+            const sizeStyle = small ? ' style="font-size:0.95rem;"' : '';
+            return `<i class="${iconClass || 'fa-solid fa-folder'}"${sizeStyle}></i>`;
+        }
+
+        function compressImageToDataUrl(file, maxSize = 160, quality = 0.78, callback) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = Math.round((height * maxSize) / width);
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = Math.round((width * maxSize) / height);
+                            height = maxSize;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    callback(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleGalleryImage(event, target) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            compressImageToDataUrl(file, 160, 0.78, function (compressedDataUrl) {
+                if (target === 'folder') {
+                    tempFolderPhoto = compressedDataUrl;
+                    updateFolderPreview();
+                } else {
+                    tempLinkPhoto = compressedDataUrl;
+                    updateLinkPreview();
+                }
+            });
+            event.target.value = '';
+        }
+
+        function clearGalleryImage(target) {
+            if (target === 'folder') {
+                tempFolderPhoto = '';
+                updateFolderPreview();
+            } else {
+                tempLinkPhoto = '';
+                updateLinkPreview();
+            }
+        }
+
+        function onFolderIconSelectChange() {
+            tempFolderPhoto = '';
+            updateFolderPreview();
+        }
+
+        function onLinkIconSelectChange() {
+            tempLinkPhoto = '';
+            updateLinkPreview();
+        }
+
+        function updateFolderPreview() {
+            const box = document.getElementById('folderIconPreviewBox');
+            const selectedIcon = document.getElementById('folderIcon').value;
+            const clearBtn = document.getElementById('folderClearPhotoBtn');
+
+            if (tempFolderPhoto) {
+                box.innerHTML = `<img src="${tempFolderPhoto}" alt="preview">`;
+                clearBtn.classList.add('show');
+            } else {
+                box.innerHTML = `<i id="folderIconPreview" class="${selectedIcon}"></i>`;
+                clearBtn.classList.remove('show');
+            }
+        }
+
+        function updateLinkPreview() {
+            const box = document.getElementById('linkIconPreviewBox');
+            const selectedIcon = document.getElementById('linkType').value;
+            const clearBtn = document.getElementById('linkClearPhotoBtn');
+
+            if (tempLinkPhoto) {
+                box.innerHTML = `<img src="${tempLinkPhoto}" alt="preview">`;
+                clearBtn.classList.add('show');
+            } else {
+                box.innerHTML = `<i id="linkIconPreview" class="${selectedIcon}"></i>`;
+                clearBtn.classList.remove('show');
+            }
+        }
+
+        function handleOwnerAccess() {
+            if (isOwnerUnlocked) {
+                isOwnerUnlocked = false;
+                isEditMode = false;
+                syncOwnerUi();
+                return;
+            }
+            const pinInput = document.getElementById('pinInput');
+            pinInput.value = '';
+            document.getElementById('pinError').style.display = 'none';
+            document.getElementById('pinModal').classList.add('show');
+            setTimeout(() => pinInput.focus(), 50);
+        }
+
+        function verifyPin() {
+            const inputVal = document.getElementById('pinInput').value.trim();
+            if (inputVal === OWNER_PASSWORD) {
+                isOwnerUnlocked = true;
+                closeModal('pinModal');
+                syncOwnerUi();
+            } else {
+                document.getElementById('pinError').style.display = 'block';
+            }
+        }
+
+        function syncOwnerUi() {
+            document.body.classList.toggle('owner-unlocked', isOwnerUnlocked);
+            document.body.classList.toggle('edit-mode', isOwnerUnlocked && isEditMode);
+            document.getElementById('editBtn').classList.toggle('active', isEditMode);
+        }
+
+        function normalizeUrl(input) {
+            const trimmed = input.trim();
+            if (/^\d{8,16}$/.test(trimmed)) {
+                return 'https://wa.me/' + trimmed;
+            }
+            if (!/^https?:\/\//i.test(trimmed)) {
+                return 'https://' + trimmed;
+            }
+            return trimmed;
+        }
+
+        function render() {
+            const listEl = document.getElementById('linksList');
+            listEl.innerHTML = '';
+
+            appData.directLinks.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = `link-card ${item.featured ? 'featured' : ''}`;
+                card.innerHTML = `
+                    <a href="${item.url}" target="_blank" class="link-left" style="text-decoration:none; color:inherit;">
+                        <div class="link-icon">${renderIconHtml(item.icon, item.photo)}</div>
+                        <div class="link-text">
+                            <span class="link-title">${escapeHtml(item.title)}</span>
+                            <span class="link-sub">${escapeHtml(item.sub)}</span>
+                        </div>
+                    </a>
+                    <div class="edit-controls">
+                        <button type="button" class="icon-action-btn" onclick="deleteDirectLink(${idx})" title="Hapus">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    <i class="fa-solid fa-chevron-right link-arrow"></i>
+                `;
+                listEl.appendChild(card);
+            });
+
+            appData.folders.forEach((folder, fIdx) => {
+                const folderEl = document.createElement('div');
+                folderEl.className = `folder-box ${folder.open ? 'open' : ''}`;
+
+                let itemsHtml = '';
+                if (folder.items.length === 0) {
+                    itemsHtml = `<div style="font-size:0.78rem; color:var(--text-muted); padding:6px 0;">Belum ada link di folder ini.</div>`;
+                } else {
+                    itemsHtml = folder.items.map((link, lIdx) => `
+                        <div class="sub-link-item">
+                            <a href="${link.url}" target="_blank" class="link-left" style="text-decoration:none; color:inherit;">
+                                <div class="link-icon" style="width:32px; height:32px;">
+                                    ${renderIconHtml(link.icon, link.photo, true)}
+                                </div>
+                                <div class="link-text">
+                                    <span class="link-title" style="font-size:0.86rem;">${escapeHtml(link.title)}</span>
+                                    <span class="link-sub" style="font-size:0.7rem;">${escapeHtml(link.url)}</span>
+                                </div>
+                            </a>
+                            <div class="edit-controls">
+                                <button type="button" class="icon-action-btn" onclick="deleteSubLink(${fIdx}, ${lIdx})" title="Hapus Link">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                folderEl.innerHTML = `
+                    <div class="folder-header" onclick="toggleFolder(${fIdx})">
+                        <div class="link-left">
+                            <div class="link-icon">${renderIconHtml(folder.icon, folder.photo)}</div>
+                            <div class="link-text">
+                                <span class="link-title">${escapeHtml(folder.name)} (${folder.items.length})</span>
+                                <span class="link-sub">${escapeHtml(folder.sub || 'Folder tautan')}</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down folder-chevron"></i>
+                    </div>
+                    <div class="folder-content">
+                        ${itemsHtml}
+                        <div class="folder-actions">
+                            <button type="button" class="mini-btn" onclick="openLinkModal('${folder.id}')">
+                                <i class="fa-solid fa-plus"></i> Tambah Link
+                            </button>
+                            <button type="button" class="mini-btn danger" onclick="deleteFolder(${fIdx})" title="Hapus Folder">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(folderEl);
+            });
+        }
+
+        function toggleFolder(idx) {
+            appData.folders[idx].open = !appData.folders[idx].open;
+            saveData();
+            render();
+        }
+
+        function toggleEditMode() {
+            if (!isOwnerUnlocked) return;
+            isEditMode = !isEditMode;
+            syncOwnerUi();
+        }
+
+        function openFolderModal() {
+            if (!isOwnerUnlocked) return;
+            tempFolderPhoto = '';
+            document.getElementById('folderPreset').value = '';
+            document.getElementById('folderIcon').value = 'fa-solid fa-folder';
+            document.getElementById('folderName').value = '';
+            document.getElementById('folderDesc').value = '';
+            updateFolderPreview();
+            document.getElementById('folderModal').classList.add('show');
+        }
+
+        function applyPreset() {
+            const val = document.getElementById('folderPreset').value;
+            if (!val) return;
+            const [name, desc, icon] = val.split('|');
+            document.getElementById('folderName').value = name;
+            document.getElementById('folderDesc').value = desc;
+            tempFolderPhoto = '';
+            if (icon) {
+                const iconSelect = document.getElementById('folderIcon');
+                const exists = Array.from(iconSelect.options).some(opt => opt.value === icon);
+                if (exists) {
+                    iconSelect.value = icon;
+                }
+            }
+            updateFolderPreview();
+        }
+
+        function saveFolder() {
+            if (!isOwnerUnlocked) return;
+            const icon = document.getElementById('folderIcon').value || 'fa-solid fa-folder';
+            const name = document.getElementById('folderName').value.trim();
+            const sub = document.getElementById('folderDesc').value.trim() || 'Koleksi tautan';
+            if (!name) return;
+
+            appData.folders.push({
+                id: 'folder-' + Date.now(),
+                name,
+                sub,
+                icon,
+                photo: tempFolderPhoto || '',
+                open: true,
+                items: []
+            });
+            saveData();
+            closeModal('folderModal');
+            render();
+        }
+
+        function openLinkModal(folderId) {
+            if (!isOwnerUnlocked) return;
+            activeFolderId = folderId;
+            tempLinkPhoto = '';
+            document.getElementById('linkType').value = 'fa-brands fa-whatsapp';
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            updateLinkPreview();
+            document.getElementById('linkModal').classList.add('show');
+        }
+
+        function saveLinkToFolder() {
+            if (!isOwnerUnlocked) return;
+            const folder = appData.folders.find(f => f.id === activeFolderId);
+            const title = document.getElementById('linkTitle').value.trim();
+            const rawUrl = document.getElementById('linkUrl').value.trim();
+            const icon = document.getElementById('linkType').value;
+            if (!folder || !title || !rawUrl) return;
+
+            folder.items.push({
+                title,
+                url: normalizeUrl(rawUrl),
+                icon,
+                photo: tempLinkPhoto || ''
+            });
+            folder.open = true;
+            saveData();
+            closeModal('linkModal');
+            render();
+        }
+
+        function deleteDirectLink(idx) {
+            if (!isOwnerUnlocked) return;
+            appData.directLinks.splice(idx, 1);
+            saveData();
+            render();
+        }
+
+        function deleteFolder(fIdx) {
+            if (!isOwnerUnlocked) return;
+            appData.folders.splice(fIdx, 1);
+            saveData();
+            render();
+        }
+
+        function deleteSubLink(fIdx, lIdx) {
+            if (!isOwnerUnlocked) return;
+            appData.folders[fIdx].items.splice(lIdx, 1);
+            saveData();
+            render();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        syncOwnerUi();
+        render();
+    </script>
+</body>
+</html>
